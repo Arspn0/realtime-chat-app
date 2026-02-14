@@ -1,9 +1,13 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useAppTheme } from '../../../hooks/useAppTheme';
+import { useAuthStore } from '../../../store/authStore';
 
 export const ProfileScreen = () => {
   const { colors, setMode, mode } = useAppTheme();
+
+  const logout = useAuthStore((state) => state.logout);
+  const { user } = useAuthStore();
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -31,6 +35,18 @@ export const ProfileScreen = () => {
       >
         <Text style={{ color: '#000000' }}>Neo-Brutalism Theme</Text>
       </TouchableOpacity>
+
+      <View style={{ marginTop: 30, width: '100%', borderTopWidth: 1, borderColor: colors.border, paddingTop: 20 }}>
+        <Text style={{ color: colors.text, textAlign: 'center', marginBottom: 10 }}>
+          Logged in as: {user?.email}
+        </Text>
+        <TouchableOpacity 
+          style={[styles.btn, { backgroundColor: '#FF4444', borderColor: colors.text }]}
+          onPress={logout}
+        >
+          <Text style={{ color: '#FFFFFF', fontWeight: 'bold' }}>LOGOUT</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
