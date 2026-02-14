@@ -4,6 +4,7 @@ import { useAppTheme } from '../../../hooks/useAppTheme';
 import { CustomInput } from '../../../components/ui/CustomInput';
 import { CustomButton } from '../../../components/ui/CustomButton';
 import { useAuthStore } from '../../../store/authStore';
+import { useNavigation } from '@react-navigation/native';
 
 export const LoginScreen = () => {
   const { colors } = useAppTheme();
@@ -12,6 +13,8 @@ export const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const navigation = useNavigation<any>();
 
   const handleLogin = () => {
     // Validasi sederhana dulu
@@ -71,7 +74,7 @@ export const LoginScreen = () => {
 
         <View style={styles.footer}>
           <Text style={{ color: colors.text }}>Don't have an account? </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
             <Text style={{ color: colors.primary, fontWeight: 'bold' }}>Register</Text>
           </TouchableOpacity>
         </View>
