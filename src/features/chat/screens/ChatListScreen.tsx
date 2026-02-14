@@ -1,22 +1,42 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useAppTheme } from '../../../hooks/useAppTheme';
+import { MOCK_CHATS } from '../data/mockChats';
+import { ChatListItem } from '../components/ChatListItem';
+import { CustomInput } from '../../../components/ui/CustomInput';
 
 export const ChatListScreen = () => {
   const { colors } = useAppTheme();
+  const navigation = useNavigation<any>();
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.text, { color: colors.text }]}>Chat List Screen</Text>
-      <Text style={[styles.subText, { color: colors.primary }]}>
-        Daftar chat akan muncul di sini.
-      </Text>
+      {/* Search Bar */}
+      <View style={styles.searchContainer}>
+        <CustomInput label="" placeholder="Search contacts..." />
+      </View>
+
+      {/* Chat List */}
+      <FlatList
+        data={MOCK_CHATS}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <ChatListItem 
+            chat={item} 
+            onPress={() => navigation.navigate('ChatRoom', { 
+              roomId: item.id, 
+              userName: item.name 
+            })} 
+          />
+        )}
+        contentContainerStyle={{ paddingBottom: 20 }}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  text: { fontSize: 24, fontWeight: 'bold' },
-  subText: { fontSize: 16, marginTop: 10 },
+  container: { flex: 1 },
+  searchContainer: { padding: 16, paddingBottom: 0 },
 });
