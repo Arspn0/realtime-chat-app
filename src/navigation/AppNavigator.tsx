@@ -8,6 +8,7 @@ import { ChatListScreen } from '../features/chat/screens/ChatListScreen';
 import { GroupListScreen } from '../features/groups/screens/GroupListScreen';
 import { ProfileScreen } from '../features/profile/screens/ProfileScreen';
 import { LoginScreen } from '../features/auth/screens/LoginScreen'; // Import Login
+import { RegisterScreen } from '../features/auth/screens/RegisterScreen';
 
 // Hooks & Store
 import { useAppTheme } from '../hooks/useAppTheme';
@@ -53,7 +54,7 @@ const AuthStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Login" component={LoginScreen} />
-      {/* Nanti tambah RegisterScreen di sini */}
+      <Stack.Screen name="Register" component={RegisterScreen} /> 
     </Stack.Navigator>
   );
 };
