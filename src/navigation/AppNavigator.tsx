@@ -9,6 +9,7 @@ import { GroupListScreen } from '../features/groups/screens/GroupListScreen';
 import { ProfileScreen } from '../features/profile/screens/ProfileScreen';
 import { LoginScreen } from '../features/auth/screens/LoginScreen'; // Import Login
 import { RegisterScreen } from '../features/auth/screens/RegisterScreen';
+import { ChatRoomScreen } from '../features/chat/screens/ChatRoomScreen';
 
 // Hooks & Store
 import { useAppTheme } from '../hooks/useAppTheme';
@@ -17,6 +18,8 @@ import { Text } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator(); // Stack untuk Auth
+
+const MainStack = createNativeStackNavigator();
 
 // 1. Komponen untuk Tab Utama (Aplikasi setelah login)
 const MainAppTabs = () => {
@@ -59,13 +62,38 @@ const AuthStack = () => {
   );
 };
 
+// Stack for main app
+const MainAppStack = () => {
+  const { colors } = useAppTheme();
+  return (
+    <MainStack.Navigator>
+      {/* Halaman Utama adalah Tabs */}
+      <MainStack.Screen 
+        name="MainTabs" 
+        component={MainAppTabs} 
+        options={{ headerShown: false }} 
+      />
+      {/* Halaman Chat Room (akan menimpa Tabs) */}
+      <MainStack.Screen 
+        name="ChatRoom" 
+        component={ChatRoomScreen}
+        options={({ route }: any) => ({
+          title: route.params.userName, // Judul header sesuai nama teman
+          headerStyle: { backgroundColor: colors.card },
+          headerTintColor: colors.text,
+        })}
+      />
+    </MainStack.Navigator>
+  );
+};
+
 // 3. Root Navigator yang memilih tampilan berdasarkan status login
 export const AppNavigator = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   return (
     <NavigationContainer>
-      {isAuthenticated ? <MainAppTabs /> : <AuthStack />}
+      {isAuthenticated ? <MainAppStack /> : <AuthStack />}
     </NavigationContainer>
   );
 };
