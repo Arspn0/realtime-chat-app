@@ -8,6 +8,9 @@ interface User {
   name: string;
   email: string;
   avatar?: string;
+  status?: string;
+  mood?: string;
+  username?: string;
 }
 
 interface AuthState {
@@ -17,9 +20,10 @@ interface AuthState {
   login: (userData: User) => Promise<void>;
   logout: () => Promise<void>;
   checkLogin: () => Promise<void>;
+  updateProfile: (updates: Partial<User>) => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>((set, get) => ({
   isAuthenticated: false,
   user: null,
   isLoading: true,
@@ -27,8 +31,9 @@ export const useAuthStore = create<AuthState>((set) => ({
   login: async (userData) => {
     try {
       // Simpan data ke SecureStore (harus string)
-      await SecureStore.setItemAsync(USER_SESSION_KEY, JSON.stringify(userData));
-      set({ isAuthenticated: true, user: userData });
+      const finalData = { ...userData, mood: '👋', status: 'Available', username: '@user' };
+      await SecureStore.setItemAsync(USER_SESSION_KEY, JSON.stringify(finalData));
+      set({ isAuthenticated: true, user: finalData });
     } catch (error) {
       console.error('Gagal menyimpan sesi', error);
     }
@@ -46,16 +51,24 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   checkLogin: async () => {
     try {
-      // Cek apakah ada data tersimpan
       const jsonValue = await SecureStore.getItemAsync(USER_SESSION_KEY);
       if (jsonValue) {
-        const userData = JSON.parse(jsonValue);
-        set({ isAuthenticated: true, user: userData, isLoading: false });
+        set({ isAuthenticated: true, user: JSON.parse(jsonValue), isLoading: false });
       } else {
         set({ isAuthenticated: false, user: null, isLoading: false });
       }
-    } catch (error) {
+    } catch {
       set({ isAuthenticated: false, user: null, isLoading: false });
+    }
+  },
+
+  updateProfile: async (updates) => {
+    const currentUser = get().user;
+    if (currentUser) {
+      const updatedUser = { ...currentUser, ...updates };
+      set({ user: updatedUser });
+      // Simpan perubahan ke storage agar permanen
+      await SecureStore.setItemAsync(USER_SESSION_KEY, JSON.stringify(updatedUser));
     }
   },
 }));
