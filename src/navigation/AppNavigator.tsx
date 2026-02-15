@@ -11,6 +11,7 @@ import { LoginScreen } from '../features/auth/screens/LoginScreen';
 import { RegisterScreen } from '../features/auth/screens/RegisterScreen';
 import { ChatRoomScreen } from '../features/chat/screens/ChatRoomScreen';
 import { EditProfileScreen } from '../features/profile/screens/EditProfileScreen';
+import { CreateGroupScreen } from '../features/groups/screens/CreateGroupScreen';
 
 // Hooks & Store
 import { useAppTheme } from '../hooks/useAppTheme';
@@ -87,6 +88,7 @@ const MainAppStack = () => {
         })}
       />
 
+      {/* Edit Profile Screen */}
       <MainStack.Screen 
         name="EditProfile" 
         component={EditProfileScreen}
@@ -94,6 +96,17 @@ const MainAppStack = () => {
           title: 'Edit Profile',
           headerStyle: { backgroundColor: colors.card },
           headerTintColor: colors.text,
+        }}
+      />
+
+      {/* Create Group Screen */}
+      <MainStack.Screen 
+        name="CreateGroup" 
+        component={CreateGroupScreen}
+        options={{
+          title: 'Buat Grup Baru',
+          // Gunakan style dari theme (harus diakses lewat hook di component parent atau inline style sederhana)
+          // Untuk kesederhanaan, biarkan default header navigation menyesuaikan
         }}
       />
     </MainStack.Navigator>
