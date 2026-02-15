@@ -7,9 +7,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { ChatListScreen } from '../features/chat/screens/ChatListScreen';
 import { GroupListScreen } from '../features/groups/screens/GroupListScreen';
 import { ProfileScreen } from '../features/profile/screens/ProfileScreen';
-import { LoginScreen } from '../features/auth/screens/LoginScreen'; // Import Login
+import { LoginScreen } from '../features/auth/screens/LoginScreen';
 import { RegisterScreen } from '../features/auth/screens/RegisterScreen';
 import { ChatRoomScreen } from '../features/chat/screens/ChatRoomScreen';
+import { EditProfileScreen } from '../features/profile/screens/EditProfileScreen';
 
 // Hooks & Store
 import { useAppTheme } from '../hooks/useAppTheme';
@@ -65,6 +66,7 @@ const AuthStack = () => {
 // Stack for main app
 const MainAppStack = () => {
   const { colors } = useAppTheme();
+
   return (
     <MainStack.Navigator>
       {/* Halaman Utama adalah Tabs */}
@@ -73,6 +75,7 @@ const MainAppStack = () => {
         component={MainAppTabs} 
         options={{ headerShown: false }} 
       />
+
       {/* Halaman Chat Room (akan menimpa Tabs) */}
       <MainStack.Screen 
         name="ChatRoom" 
@@ -82,6 +85,16 @@ const MainAppStack = () => {
           headerStyle: { backgroundColor: colors.card },
           headerTintColor: colors.text,
         })}
+      />
+
+      <MainStack.Screen 
+        name="EditProfile" 
+        component={EditProfileScreen}
+        options={{
+          title: 'Edit Profile',
+          headerStyle: { backgroundColor: colors.card },
+          headerTintColor: colors.text,
+        }}
       />
     </MainStack.Navigator>
   );
