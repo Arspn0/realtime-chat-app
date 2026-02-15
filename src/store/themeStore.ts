@@ -7,6 +7,6 @@ interface ThemeState {
 }
 
 export const useThemeStore = create<ThemeState>((set) => ({
-  mode: 'minimalist', // Default theme
+  mode: 'neobrutalism', // Default theme
   setMode: (mode) => set({ mode }),
 }));
