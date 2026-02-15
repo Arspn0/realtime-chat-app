@@ -105,8 +105,8 @@ const MainAppStack = () => {
         component={CreateGroupScreen}
         options={{
           title: 'Buat Grup Baru',
-          // Gunakan style dari theme (harus diakses lewat hook di component parent atau inline style sederhana)
-          // Untuk kesederhanaan, biarkan default header navigation menyesuaikan
+          headerStyle: { backgroundColor: colors.card },
+          headerTintColor: colors.text,
         }}
       />
     </MainStack.Navigator>
