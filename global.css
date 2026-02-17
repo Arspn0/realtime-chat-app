@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/** MINIMALIST **/
+@keyframes minimalist-message-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+@keyframes minimalist-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.85); }
+  50%       { opacity: 1;   transform: scale(1); }
+}
+
+/** NEO-BRUTALISM **/
+@keyframes neo-message-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes neo-typing {
+  0%   { background-color: #000; }
+  33%  { background-color: #FFE600; }
+  66%  { background-color: #000; }
+  100% { background-color: #000; }
+}
+@keyframes neo-shake {
+  10%, 90%  { transform: translateX(-1px); }
+  20%, 80%  { transform: translateX(2px); }
+  30%, 70%  { transform: translateX(-3px); }
+  40%, 60%  { transform: translateX(3px); }
+  50%        { transform: translateX(-1px); }
+}
+
+/** RETRO **/
+@keyframes retro-message-in {
+  0%   { opacity: 0; clip-path: inset(0 100% 0 0); }
+  100% { opacity: 1; clip-path: inset(0 0%   0 0); }
+}
+@keyframes retro-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+@keyframes retro-cursor {
+  0%, 49% { border-right: 2px solid currentColor; }
+  50%, 100% { border-right: 2px solid transparent; }
+}
+@keyframes retro-scanline {
+  0%   { background-position: 0 0; }
+  100% { background-position: 0 100vh; }
+}
+@keyframes retro-flicker {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.97; }
+  100% { opacity: 1; }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
