@@ -70,6 +70,7 @@ const MainAppStack = () => {
         options={({ route }: any) => ({
           title: route.params.userName, // Judul header sesuai nama teman
           headerStyle: { backgroundColor: colors.card },
+          headerShown: false,
           headerTintColor: colors.text,
         })}
       />
