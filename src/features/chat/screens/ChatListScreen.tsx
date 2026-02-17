@@ -26,11 +26,12 @@ export const ChatListScreen = () => {
             chat={item} 
             onPress={() => navigation.navigate('ChatRoom', { 
               roomId: item.id, 
-              userName: item.name 
+              userName: item.name,
+              userAvatar: item.avatar,
             })} 
           />
         )}
-        contentContainerStyle={{ paddingBottom: 20 }}
+        contentContainerStyle={{ paddingBottom: 120 }}
       />
     </View>
   );
