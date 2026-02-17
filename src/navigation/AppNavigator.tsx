@@ -12,11 +12,11 @@ import { RegisterScreen } from '../features/auth/screens/RegisterScreen';
 import { ChatRoomScreen } from '../features/chat/screens/ChatRoomScreen';
 import { EditProfileScreen } from '../features/profile/screens/EditProfileScreen';
 import { CreateGroupScreen } from '../features/groups/screens/CreateGroupScreen';
+import { CustomBottomTab } from '../navigation/CustomBottomTab';
 
 // Hooks & Store
 import { useAppTheme } from '../hooks/useAppTheme';
-import { useAuthStore } from '../store/authStore'; // Import Auth Store
-import { Text } from 'react-native';
+import { useAuthStore } from '../store/authStore';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator(); // Stack untuk Auth
@@ -25,27 +25,13 @@ const MainStack = createNativeStackNavigator();
 
 // 1. Komponen untuk Tab Utama (Aplikasi setelah login)
 const MainAppTabs = () => {
-  const { colors } = useAppTheme();
+
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        headerStyle: { backgroundColor: colors.card },
-        headerTintColor: colors.text,
-        tabBarStyle: { 
-          backgroundColor: colors.card, 
-          borderTopColor: colors.border,
-          borderTopWidth: 1, 
-        },
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: 'gray',
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName = '';
-          if (route.name === 'Chat') iconName = '💬';
-          else if (route.name === 'Groups') iconName = '👥';
-          else if (route.name === 'Profile') iconName = '👤';
-          return <Text style={{ fontSize: 20 }}>{iconName}</Text>;
-        },
-      })}
+      tabBar={(props) => <CustomBottomTab {...props} />}
+      screenOptions={{
+        headerShown: false,
+      }}
     >
       <Tab.Screen name="Chat" component={ChatListScreen} />
       <Tab.Screen name="Groups" component={GroupListScreen} />
