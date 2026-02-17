@@ -7,12 +7,13 @@ import { MOCK_CHATS } from '../data/mockChats';
 
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'react-native'; // Pastikan Image diimpor dari react-native
-import { Ionicons } from '@expo/vector-icons'; // Kita pakai icon bawaan Expo untuk tombol +
+import { Send, Plus, Image as ImageIcon } from 'lucide-react-native';
+import { ThemedIcon } from '../../../components/ui/ThemedIcon';
 
 export const ChatRoomScreen = ({ route }: any) => {
   const { colors, mode } = useAppTheme();
   const { roomId } = route.params;
-  const isNeo = mode === 'neobrutalism';
+  const isNeo = mode === 'neo-brutalism';
 
   // Ambil data chat berdasarkan ID, atau kosong jika tidak ada
   const chatData = MOCK_CHATS.find(c => c.id === roomId);
@@ -148,7 +149,8 @@ export const ChatRoomScreen = ({ route }: any) => {
           onPress={pickImage}
           style={{ marginRight: 10, padding: 5 }}
         >
-          <Ionicons name="add-circle-outline" size={32} color={colors.primary} />
+          {/* Gunakan ThemedIcon */}
+          <ThemedIcon icon={Plus} size={28} color={colors.primary} />
         </TouchableOpacity>
 
         <TextInput
@@ -179,7 +181,7 @@ export const ChatRoomScreen = ({ route }: any) => {
             }
           ]}
         >
-          <Ionicons name="send" size={20} color="#fff" />
+          <ThemedIcon icon={Send} size={20} color="#fff" strokeWidth={2.5} />
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
