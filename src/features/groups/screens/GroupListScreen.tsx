@@ -8,7 +8,7 @@ export const GroupListScreen = () => {
   const { colors, mode } = useAppTheme();
   const navigation = useNavigation<any>();
   const groups = useGroupStore((state) => state.groups);
-  const isNeo = mode === 'neobrutalism';
+  const isNeo = mode === 'neo-brutalism';
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -16,7 +16,7 @@ export const GroupListScreen = () => {
       <FlatList
         data={groups}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ padding: 16 }}
+        contentContainerStyle={{ padding: 16, paddingBottom: 120 }}
         ListEmptyComponent={
           <Text style={{ color: colors.text, textAlign: 'center', marginTop: 20 }}>
             Belum ada grup. Buat sekarang!
@@ -59,6 +59,7 @@ export const GroupListScreen = () => {
             backgroundColor: colors.primary,
             borderColor: colors.text,
             borderWidth: isNeo ? 2 : 0,
+            bottom: 110,
           }
         ]}
         onPress={() => navigation.navigate('CreateGroup')}
