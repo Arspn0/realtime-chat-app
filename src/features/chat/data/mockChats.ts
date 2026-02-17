@@ -4,6 +4,8 @@ export interface Message {
   senderId: string; // 'me' atau ID teman
   timestamp: string;
   isRead: boolean;
+  image?: string;
+  type: 'text' | 'image';
 }
 
 export interface ChatRoom {
@@ -26,9 +28,9 @@ export const MOCK_CHATS: ChatRoom[] = [
     unreadCount: 2,
     isOnline: true,
     messages: [
-      { id: 'm1', text: 'Halo bro', senderId: 'me', timestamp: '10:00', isRead: true },
-      { id: 'm2', text: 'Gimana kabar aplikasi?', senderId: '1', timestamp: '10:05', isRead: true },
-      { id: 'm3', text: 'Siap, project aman bro?', senderId: '1', timestamp: '10:30', isRead: false },
+      { id: 'm1', text: 'Halo bro', senderId: 'me', timestamp: '10:00', isRead: true, type: 'text' },
+      { id: 'm2', text: 'Gimana kabar aplikasi?', senderId: '1', timestamp: '10:05', isRead: true, type: 'text' },
+      { id: 'm3', text: 'Siap, project aman bro?', senderId: '1', timestamp: '10:30', isRead: false, type: 'text' },
     ]
   },
   {
@@ -39,8 +41,8 @@ export const MOCK_CHATS: ChatRoom[] = [
     unreadCount: 0,
     isOnline: false,
     messages: [
-      { id: 'm1', text: 'File sudah dikirim ya', senderId: 'me', timestamp: '09:00', isRead: true },
-      { id: 'm2', text: 'Oke, makasih ya.', senderId: '2', timestamp: '09:10', isRead: true },
+      { id: 'm1', text: 'File sudah dikirim ya', senderId: 'me', timestamp: '09:00', isRead: true, type: 'text' },
+      { id: 'm2', text: 'Oke, makasih ya.', senderId: '2', timestamp: '09:10', isRead: true, type: 'text' },
     ]
   },
   {
