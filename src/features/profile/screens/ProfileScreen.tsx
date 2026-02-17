@@ -79,7 +79,7 @@ export const ProfileScreen = () => {
   return (
     <ScrollView 
       style={{ flex: 1, backgroundColor: colors.background }}
-      contentContainerStyle={{ paddingBottom: 40 }}
+      contentContainerStyle={{ paddingBottom: 120 }}
     >
       {/* 1. Header Profile dengan Animasi */}
       <Animated.View 
