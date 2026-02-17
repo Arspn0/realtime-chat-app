@@ -1,12 +1,23 @@
 import { create } from 'zustand';
-import { ThemeMode } from '../config/theme';
+import { ThemeKey, ThemeMode } from '../config/theme';
 
 interface ThemeState {
-  mode: ThemeMode;
-  setMode: (mode: ThemeMode) => void;
+  mode: ThemeKey;        // 'minimalist' | 'neo-brutalism' | 'retro'
+  colorScheme: ThemeMode; // 'light' | 'dark'
+  setMode: (mode: ThemeKey) => void;
+  setColorScheme: (scheme: ThemeMode) => void;
+  toggleColorScheme: () => void;
 }
 
 export const useThemeStore = create<ThemeState>((set) => ({
-  mode: 'neobrutalism', // Default theme
+  mode: 'minimalist', // Default theme
+  colorScheme: 'light', // Default mode
+  
   setMode: (mode) => set({ mode }),
+  
+  setColorScheme: (scheme) => set({ colorScheme: scheme }),
+  
+  toggleColorScheme: () => set((state) => ({ 
+    colorScheme: state.colorScheme === 'light' ? 'dark' : 'light' 
+  })),
 }));

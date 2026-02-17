@@ -11,7 +11,7 @@ export const ProfileScreen = () => {
   const { colors, setMode, mode } = useAppTheme();
   const { user, logout } = useAuthStore();
   const navigation = useNavigation<any>();
-  const isNeo = mode === 'neobrutalism';
+  const isNeo = mode === 'neo-brutalism';
   
   const [showQR, setShowQR] = useState(false); // State untuk Modal QR
 
@@ -32,7 +32,7 @@ export const ProfileScreen = () => {
             {user?.avatar ? (
                <Image source={{ uri: user.avatar }} style={styles.avatar} />
             ) : (
-              <View style={[styles.avatarPlaceholder, { backgroundColor: colors.secondary }]}>
+              <View style={[styles.avatarPlaceholder, { backgroundColor: colors.backgroundElevated }]}>
                  <Text style={{ fontSize: 32 }}>{user?.name?.charAt(0)}</Text>
               </View>
             )}
@@ -52,14 +52,14 @@ export const ProfileScreen = () => {
 
         <View style={styles.actionRow}>
           <TouchableOpacity 
-            style={[styles.smallBtn, { borderColor: colors.text, backgroundColor: colors.secondary }]}
+            style={[styles.smallBtn, { borderColor: colors.text, backgroundColor: colors.backgroundElevated }]}
             onPress={() => navigation.navigate('EditProfile')}
           >
             <Text style={{ color: colors.text }}>Edit Profile</Text>
           </TouchableOpacity>
           
           <TouchableOpacity 
-            style={[styles.smallBtn, { borderColor: colors.text, backgroundColor: colors.secondary }]}
+            style={[styles.smallBtn, { borderColor: colors.text, backgroundColor: colors.backgroundElevated }]}
             onPress={() => setShowQR(true)}
           >
             <Text style={{ color: colors.text }}>Show QR ID</Text>
@@ -72,24 +72,15 @@ export const ProfileScreen = () => {
         <Text style={[styles.sectionTitle, { color: colors.text }]}>Appearance</Text>
         
         {/* Tombol Tema (Sama seperti sebelumnya, disederhanakan) */}
-        {['minimalist', 'retro', 'neobrutalism'].map((themeName) => (
-           <TouchableOpacity 
-             key={themeName}
-             style={[
-               styles.menuItem, 
-               { 
-                 backgroundColor: colors.card, 
-                 borderColor: colors.text,
-                 borderWidth: isNeo ? 2 : 1,
-                 marginBottom: 8
-               }
-             ]}
-             onPress={() => setMode(themeName as any)}
-           >
-             <Text style={{ color: colors.text, textTransform: 'capitalize' }}>
-               {themeName} Theme {mode === themeName && '✓'}
-             </Text>
-           </TouchableOpacity>
+        // Cari bagian ini di ProfileScreen.tsx
+        {['minimalist', 'retro', 'neo-brutalism'].map((themeName) => ( // Ubah 'neobrutalism' jadi 'neo-brutalism'
+          <TouchableOpacity 
+            key={themeName}
+            // ...
+            onPress={() => setMode(themeName as any)}
+          >
+            {/* ... */}
+          </TouchableOpacity>
         ))}
       </View>
 
