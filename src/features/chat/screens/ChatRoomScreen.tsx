@@ -9,10 +9,12 @@ import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'react-native'; // Pastikan Image diimpor dari react-native
 import { Send, Plus, Image as ImageIcon } from 'lucide-react-native';
 import { ThemedIcon } from '../../../components/ui/ThemedIcon';
+import { CustomChatHeader } from '../../../components/navigation/CustomChatHeader';
+import { MessageBubble } from '../components/MessageBubble';
 
 export const ChatRoomScreen = ({ route }: any) => {
   const { colors, mode } = useAppTheme();
-  const { roomId } = route.params;
+  const { roomId, userName, userAvatar } = route.params;
   const isNeo = mode === 'neo-brutalism';
 
   // Ambil data chat berdasarkan ID, atau kosong jika tidak ada
@@ -36,57 +38,31 @@ export const ChatRoomScreen = ({ route }: any) => {
     setInputText('');
   };
 
-  const renderItem = ({ item }: any) => {
-    const isMe = item.senderId === 'me';
-    
-    return (
-      <View style={[
-        styles.bubbleWrapper, 
-        { justifyContent: isMe ? 'flex-end' : 'flex-start' }
-      ]}>
-        <View style={[
-          styles.bubble,
-          {
-            backgroundColor: isMe ? colors.primary : colors.card,
-            borderColor: colors.text,
-            borderWidth: isNeo ? 2 : 0,
-            // ... shadow styles (biarkan sama) ...
-            shadowColor: colors.text,
-            shadowOffset: isNeo ? { width: 3, height: 3 } : { width: 0, height: 0 },
-            shadowOpacity: isNeo ? 1 : 0,
-            borderBottomRightRadius: isMe ? 0 : 16,
-            borderBottomLeftRadius: isMe ? 16 : 0,
-            padding: item.type === 'image' ? 4 : 12, // Padding lebih kecil jika gambar
-          }
-        ]}>
-          
-          {/* LOGIC RENDER: Jika Image tampilkan gambar, jika Teks tampilkan teks */}
-          {item.type === 'image' && item.image ? (
-            <Image 
-              source={{ uri: item.image }} 
-              style={{ width: 200, height: 150, borderRadius: 8 }} 
-              resizeMode="cover"
-            />
-          ) : (
-            <Text style={{ 
-              color: isMe ? '#fff' : colors.text,
-              fontWeight: isNeo ? 'bold' : 'normal'
-            }}>
-              {item.text}
-            </Text>
-          )}
+  const renderItem = ({ item, index }: { item: any, index: number }) => {
+    // Karena FlatList kita 'inverted' (terbalik), maka:
+    // - 'Next' Message secara visual adalah index - 1 (di bawahnya dalam array)
+    // - 'Previous' Message secara visual adalah index + 1 (di atasnya dalam array)
 
-          <Text style={{ 
-            fontSize: 10, 
-            color: isMe ? '#eee' : colors.text, 
-            marginTop: 4, 
-            alignSelf: 'flex-end',
-            opacity: 0.7 
-          }}>
-            {item.timestamp}
-          </Text>
-        </View>
-      </View>
+    const nextMessage = messages[index - 1]; 
+    const prevMessage = messages[index + 1];
+
+    const isMe = item.senderId === 'me';
+
+    // Logika Grouping:
+    // Apakah ini pesan pertama dalam grup? (Jika pesan sebelumnya beda pengirim)
+    const isFirstInGroup = !prevMessage || prevMessage.senderId !== item.senderId;
+
+    // Apakah ini pesan terakhir dalam grup? (Jika pesan setelahnya beda pengirim)
+    const isLastInGroup = !nextMessage || nextMessage.senderId !== item.senderId;
+
+    return (
+      <MessageBubble
+        message={item}
+        isMe={isMe}
+        isFirstInGroup={isFirstInGroup}
+        isLastInGroup={isLastInGroup}
+        showAvatar={true} // Nanti bisa dikondisikan kalau grup chat
+      />
     );
   };
 
@@ -125,66 +101,76 @@ export const ChatRoomScreen = ({ route }: any) => {
   };
 
   return (
-    <KeyboardAvoidingView 
-      style={[styles.container, { backgroundColor: colors.background }]} 
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-      keyboardVerticalOffset={90} // Sesuaikan dengan tinggi header
-    >
-      <FlatList
-        data={messages}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        inverted // Pesan terbaru di bawah (teknisnya di atas karena inverted)
-        contentContainerStyle={{ padding: 16 }}
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
+      {/* 1. Custom Header (Sticky di atas) */}
+      <CustomChatHeader 
+        name={userName || 'Unknown'} 
+        avatar={userAvatar} // Nanti kita update navigasi biar kirim avatar
+        status="Online" 
       />
 
-      {/* Input Area */}
-      <View style={[
-        styles.inputContainer, 
-        { backgroundColor: colors.card, borderTopColor: colors.border, borderTopWidth: 1 }
-      ]}>
-        
-        {/* TOMBOL TAMBAH GAMBAR */}
-        <TouchableOpacity 
-          onPress={pickImage}
-          style={{ marginRight: 10, padding: 5 }}
-        >
-          {/* Gunakan ThemedIcon */}
-          <ThemedIcon icon={Plus} size={28} color={colors.primary} />
-        </TouchableOpacity>
-
-        <TextInput
-          style={[
-            styles.input, 
-            { 
-              backgroundColor: colors.background, 
-              color: colors.text,
-              borderColor: colors.text,
-              borderWidth: isNeo ? 2 : 1,
-            }
-          ]}
-          placeholder="Type a message..."
-          placeholderTextColor="#999"
-          value={inputText}
-          onChangeText={setInputText}
+      {/* 2. Area Chat (KeyboardAvoidingView) */}
+      <KeyboardAvoidingView 
+        style={{ flex: 1 }} 
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}// Sesuaikan dengan tinggi header
+      >
+        <FlatList
+          data={messages}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          inverted // Pesan terbaru di bawah (teknisnya di atas karena inverted)
+          contentContainerStyle={{ padding: 2, paddingBottom: 20 }}
         />
-        
-        <TouchableOpacity 
-          onPress={sendMessage}
-          style={[
-            styles.sendBtn, 
-            { 
-              backgroundColor: colors.primary,
-              borderColor: colors.text,
-              borderWidth: isNeo ? 2 : 0,
-              // ... shadow ...
-            }
-          ]}
-        >
-          <ThemedIcon icon={Send} size={20} color="#fff" strokeWidth={2.5} />
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+
+        {/* Input Area */}
+        <View style={[
+          styles.inputContainer, 
+          { backgroundColor: colors.card, borderTopColor: colors.border, borderTopWidth: 1 }
+        ]}>
+          
+          {/* TOMBOL TAMBAH GAMBAR */}
+          <TouchableOpacity 
+            onPress={pickImage}
+            style={{ marginRight: 10, padding: 5 }}
+          >
+            {/* Gunakan ThemedIcon */}
+            <ThemedIcon icon={Plus} size={28} color={colors.primary} />
+          </TouchableOpacity>
+
+          <TextInput
+            style={[
+              styles.input, 
+              { 
+                backgroundColor: colors.background, 
+                color: colors.text,
+                borderColor: colors.text,
+                borderWidth: isNeo ? 2 : 1,
+              }
+            ]}
+            placeholder="Type a message..."
+            placeholderTextColor="#999"
+            value={inputText}
+            onChangeText={setInputText}
+          />
+          
+          <TouchableOpacity 
+            onPress={sendMessage}
+            style={[
+              styles.sendBtn, 
+              { 
+                backgroundColor: colors.primary,
+                borderColor: colors.text,
+                borderWidth: isNeo ? 2 : 0,
+                // ... shadow ...
+              }
+            ]}
+          >
+            <ThemedIcon icon={Send} size={20} color="#fff" strokeWidth={2.5} />
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+    </View>
   );
 };
 

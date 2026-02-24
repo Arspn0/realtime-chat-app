@@ -19,14 +19,14 @@ interface GroupState {
 export const useGroupStore = create<GroupState>((set) => ({
   // Data awal dummy
   groups: [
-    {
-      id: 'g1',
-      name: 'Tim Developer',
-      description: 'Diskusi project React Native',
-      members: [],
-      admins: ['me'],
-      avatar: 'https://ui-avatars.com/api/?name=Tim+Dev&background=random',
-    }
+    // {
+    //   id: 'g1',
+    //   name: 'Tim Developer',
+    //   description: 'Diskusi project React Native',
+    //   members: [],
+    //   admins: ['me'],
+    //   avatar: 'https://ui-avatars.com/api/?name=Tim+Dev&background=random',
+    // }
   ],
 
   createGroup: (name, members) => set((state) => ({

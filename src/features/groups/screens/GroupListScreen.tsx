@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native
 import { useNavigation } from '@react-navigation/native';
 import { useAppTheme } from '../../../hooks/useAppTheme';
 import { useGroupStore } from '../../../store/groupStore';
+import { EmptyState } from '../../../components/ui/EmptyState';
+import { Users } from 'lucide-react-native';
 
 export const GroupListScreen = () => {
   const { colors, mode } = useAppTheme();
@@ -18,9 +20,11 @@ export const GroupListScreen = () => {
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ padding: 16, paddingBottom: 120 }}
         ListEmptyComponent={
-          <Text style={{ color: colors.text, textAlign: 'center', marginTop: 20 }}>
-            Belum ada grup. Buat sekarang!
-          </Text>
+          <EmptyState 
+            title={isNeo ? "NO SQUAD YET!" : "No Groups Found"}
+            description="Kamu belum bergabung dengan grup manapun. Buat grup baru atau minta undangan teman."
+            icon={Users}
+          />
         }
         renderItem={({ item }) => (
           <TouchableOpacity
